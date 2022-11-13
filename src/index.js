@@ -1,13 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import 'materialize-css';
 import reportWebVitals from './reportWebVitals';
+import {Container} from "react-materialize";
+import LoginPage from "./LoginPage";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Container>
+        <LoginPage/>
+    </Container>
   </React.StrictMode>
 );
 

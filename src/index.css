@@ -5,6 +5,7 @@
     --bg-color: #fff;
     --heading-color: #292922;
     --hover-color: #B9BFEC;
+    --active-color: #fff
 }
 [data-theme="dark"] {
     --primary-color: #9A97F3;
@@ -13,6 +14,7 @@
     --bg-color: #161625;
     --heading-color: #818cab;
     --hover-color: #D5D8F3;
+    --active-color: #fff
 }
 body{
     background-color: var(--bg-color);
@@ -34,4 +36,14 @@ body{
 }
 .tabs .indicator{
     background-color: #D5D8F3;
+}
+.league-card{
+    background-color: var(--secondary-color);
+    color: var(--font-color);
+}
+.leagueBetButton{
+    background-color: var(--secondary-color) !important;
+}
+.leagueBetButton.active{
+    background-color: var(--active-color) !important;
 }

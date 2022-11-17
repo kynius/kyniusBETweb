@@ -1,6 +1,6 @@
 import {Col, Row, Tab, Tabs} from "react-materialize";
-import Login from "./Components/Login";
-import Register from "./Components/Register";
+import RegisterPartial from "./Components/RegisterPartial";
+import LoginPartial from "./Components/LoginPartial";
 
 
 export default function LoginPage(){
@@ -11,6 +11,7 @@ export default function LoginPage(){
                 <Col l={6} m={8} s={12} offset={'l3 m2'}>
             <Tabs className={'tab-demo z-depth-1 tabs-fixed-width'}>
                 <Tab
+                    idx={'login'}
                     options={{
                         duration: 300,
                         onShow: null,
@@ -19,9 +20,10 @@ export default function LoginPage(){
                     }}
                     title="Login"
                 >
-                    <Login/>
+                    <LoginPartial/>
                 </Tab>
                 <Tab
+                    idx={'register'}
                     options={{
                         duration: 300,
                         onShow: null,
@@ -30,7 +32,7 @@ export default function LoginPage(){
                     }}
                     title="Register"
                 >
-                   <Register/>
+                   <RegisterPartial/>
                 </Tab>
             </Tabs>
                 </Col>

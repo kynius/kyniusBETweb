@@ -4,13 +4,23 @@ import './index.css';
 import 'materialize-css';
 import reportWebVitals from './reportWebVitals';
 import {Container} from "react-materialize";
-import LoginPage from "./LoginPage";
-
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import Home from "./Home";
+import LeagueAdminPage from "./LeagueAdminPage";
+import LeagueUserPage from "./LeagueUserPage";
+import Navbar from "./Components/Navbar";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+      <Navbar/>
     <Container>
-        <LoginPage/>
+        <BrowserRouter>
+            <Routes>
+            <Route path={"/"} element={Home()}></Route>
+            <Route path={`/league/Admin/:id`} element={<LeagueAdminPage/>}></Route>
+            <Route path={`/league/User/:id`} element={<LeagueUserPage/>}></Route>
+            </Routes>
+        </BrowserRouter>
     </Container>
   </React.StrictMode>
 );

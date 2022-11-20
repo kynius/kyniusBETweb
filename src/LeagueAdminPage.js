@@ -54,11 +54,14 @@ export default function LeagueAdminPage(){
                     }
                     request.push(bet);
             })
+            console.log(request);
             postRequest.request({
                 url: `/LeagueBet/AddLeagueBets/${id}`,
                 data: request
-            });
-            navigate('/');
+            }).then((result) => {
+                navigate('/');
+            })
+            
         }
         function checkLoading() {
             if (loading === true) {
@@ -151,7 +154,7 @@ export default function LeagueAdminPage(){
                 <div className={'center'}>
                     {checkLoading()}
                 </div>
-                
+                <div style={{marginTop:'80px'}}></div>
             </>
         )
 }

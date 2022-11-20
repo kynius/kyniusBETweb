@@ -228,6 +228,7 @@ export default function LeagueUserPage(){
                 />
             {checkLoading()}
             </Row>
+            <div style={{marginTop:'80px'}}></div>
         </>
     )
 }

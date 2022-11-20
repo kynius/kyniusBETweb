@@ -47,3 +47,19 @@ body{
 .leagueBetButton.active{
     background-color: var(--active-color) !important;
 }
+.mobileNav{
+    position: fixed;
+    bottom: -20px;
+    color: var(--bg-color);
+    background: var(--secondary-color);
+    width: 100%;
+    z-index: 9999;
+}
+.mobileNavIcon{
+    color: var(--bg-color);
+}
+.addButton{
+    position: fixed;
+    bottom: 100px;
+    right: 5px;
+}

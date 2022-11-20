@@ -1,22 +1,78 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {getRequest} from "./Request";
-import {Button, Card, Col, Icon, Preloader, Row, TextInput} from "react-materialize";
+import {getRequest, postRequest} from "./Request";
+import {Button, Card, Col, Icon, Preloader, Row} from "react-materialize";
 
 export default function LeagueUserPage(){
     const [loading, isLoading] = useState(true);
     const [matches, setMatches] = useState([]);
+    const [bets, setBets] = useState([]);
+    const [error, setError] = useState([]);
     let {id} = useParams()
     useEffect(() => {
         let betResponse = getRequest.request({
             url: `LeagueBet/GetAllLeagueBets/${id}`
         });
         betResponse.then((result) => {
-            setMatches(result.data.message);
+            if(result.data.message !== 'League have no active bets')
+            {
+                setMatches(result.data.message);
+            }
+            else {
+                setError(result.data.message);
+            }
             isLoading(false);
+        }).catch(function (error){
+            if(error.response){
+                setError(error.response.data.message)
+                isLoading(false);
+            }
         })
-    }, [])
-    function getBetOptions(bet){
+    }, [id])
+    const setActive = event => {
+        let value = event.currentTarget.firstElementChild.dataset.type + ';' + event.currentTarget.firstElementChild.dataset.value;
+        let otherBets = Array.from(document.querySelectorAll(`[data-type="${event.currentTarget.firstElementChild.dataset.type}"]`))
+        let activeBet = otherBets.find((x) => x.parentElement.classList.contains('active') === true);
+        if(event.currentTarget.firstElementChild.dataset.type !== undefined || event.currentTarget.firstElementChild.dataset.value !== undefined)
+        {
+            if(activeBet === undefined || activeBet.parentElement === event.currentTarget)
+            {
+                event.currentTarget.classList.toggle('active');
+                if(bets.includes(value))
+                {
+                    setBets(bets.filter(item => item !== value))
+                }
+                else{
+                    setBets((prevState) => [...prevState, value])
+                }
+            }
+            else{
+                let activeBetValue = activeBet.dataset.type + ';' + activeBet.dataset.value;
+                activeBet.parentElement.classList.toggle('active');
+                event.currentTarget.classList.toggle('active');
+                setBets(bets.filter(item => item !== activeBetValue));
+                setBets((prevState) => [...prevState, value]);
+            }
+        }
+    }
+    function onSave(){
+        let request = [];
+        bets.forEach((b) => {
+            let ids = b.split(';');
+            let bet =  {
+                "leagueBetId": parseInt(ids[0]),
+                "value": ids[2],
+                "dateToBet": ids[1]
+            }
+            request.push(bet);
+        })
+        console.log(request);
+        postRequest.request({
+            url: `/Bet/AddBet/${id}`,
+            data: request
+        });
+    }
+    function betOptions(bet){
         if(bet.betType.name === "Winner")
         {
             return(
@@ -29,31 +85,34 @@ export default function LeagueUserPage(){
                         }}
                         className={'leagueBetButton'}
                         waves="light"
+                        onClick={setActive}
                     >
-                        <div>1</div>
+                        <div data-type={`${bet.id};${bet.dateToBet}`} data-value={bet.homeTeam.id}>{bet.homeTeam.name}</div>
                     </Button>
                     <Button
-                    node="button"
-                    style={{
-                        marginRight: '5px',
-                        marginTop: '5px'
-                    }}
-                    className={'leagueBetButton'}
-                    waves="light"
-                >
-                    <div>X</div>
-                </Button>
+                        node="button"
+                        style={{
+                            marginRight: '5px',
+                            marginTop: '5px'
+                        }}
+                        className={'leagueBetButton'}
+                        waves="light"
+                        onClick={setActive}
+                    >
+                        <div data-type={`${bet.id};${bet.dateToBet}`} data-value={0}>X</div>
+                    </Button>
                     <Button
-                    node="button"
-                    style={{
-                        marginRight: '5px',
-                        marginTop: '5px'
-                    }}
-                    className={'leagueBetButton'}
-                    waves="light"
-                >
-                    <div>2</div>
-                </Button>
+                        node="button"
+                        style={{
+                            marginRight: '5px',
+                            marginTop: '5px'
+                        }}
+                        className={'leagueBetButton'}
+                        waves="light"
+                        onClick={setActive}
+                    >
+                        <div data-type={`${bet.id};${bet.dateToBet}`} data-value={bet.awayTeam.id}>{bet.awayTeam.name}</div>
+                    </Button>
                 </>
             )
         }
@@ -68,8 +127,9 @@ export default function LeagueUserPage(){
                         }}
                         className={'leagueBetButton'}
                         waves="light"
+                        onClick={setActive}
                     >
-                        <div><Icon className={'green-text'} large={true}>check</Icon></div>
+                        <div data-type={`${bet.id};${bet.dateToBet}`} data-value={true}><Icon className={'green-text'} large={true}>check</Icon></div>
                     </Button>
                     <Button
                         node="button"
@@ -77,23 +137,32 @@ export default function LeagueUserPage(){
                             marginRight: '5px',
                             marginTop: '5px'
                         }}
-                        className={'leagueBetButton'}
+                        className={`leagueBetButton`}
                         waves="light"
+                        onClick={setActive}
                     >
-                        <div><Icon className={'red-text'} large={true}>close</Icon></div>
+                        <div data-type={`${bet.id};${bet.dateToBet}`} data-value={false}><Icon className={'red-text'} large={true}>close</Icon></div>
                     </Button>
                 </>
             )
         }
         else if(bet.betType.name === "Score"){
             return (
-               <>
-                   <input />
-               </>
+                <>
+                    <Row>
+                        <Col l={4} m={4} s={4}>
+                            <input onChange={onSave} data-type={`${bet.id};${bet.dateToBet};home`} className={'center'} defaultValue={0} type={'number'}/>
+                        </Col>
+                        <Col l={4} m={4} s={4}>
+                        </Col>
+                        <Col l={4} m={4} s={4}>
+                            <input data-type={`${bet.id};${bet.dateToBet};home`} className={'center'} defaultValue={0} type={'number'}/>
+                        </Col>
+                    </Row>
+                </>
             )
         }
     }
-    console.log(matches);
     function checkLoading() {
         if (loading === true) {
             return (
@@ -110,6 +179,7 @@ export default function LeagueUserPage(){
     }
     return(
         <>
+            <div className={'red-text center'}>{error}</div>
             <Row>
             {matches.map((m) => (
                 <Col l={6} m={6} s={12} offset={''} className={'center'}>
@@ -118,12 +188,12 @@ export default function LeagueUserPage(){
                         textClassName="white-text"
                         title={m.homeTeam.name + ' vs ' + m.awayTeam.name}
                         actions={[
-                            getBetOptions(m)
+                            betOptions(m)
                         ]}
                     >
                         <div className={'center'}>
                             <div>
-                            Match date: {new Date(m.dateTime).toLocaleString()}
+                                Match date: {new Date(m.dateTime).toLocaleString()}
                             </div>
                             <div>
                                 Closing bet at {new Date(m.dateToBet).toLocaleString()}
@@ -139,7 +209,7 @@ export default function LeagueUserPage(){
                                     VS
                                 </div>
                                 <div>
-                                    <span className={'hide-on-med-and-down'}>Bet type:</span> {m.betType.name}
+                                    <span className={'hide-on-med-and-down'}>Bet type:</span>{m.betType.name}
                                 </div>
                             </Col>
                             <Col l={3} m={5} s={5}>

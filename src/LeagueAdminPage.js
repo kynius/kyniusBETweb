@@ -1,5 +1,5 @@
 import {getRequest, postRequest} from "./Request";
-import {Button, Card, Col, Icon, Preloader, Row} from "react-materialize";
+import {Button, Card, Col, Icon, Preloader, Row, TextInput} from "react-materialize";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom"; 
 
@@ -8,7 +8,7 @@ export default function LeagueAdminPage(){
         const [matches, setMatches] = useState([]);
         const [betTypes, setBetTypes] = useState([]);
         const [bets, setBets] = useState([]);
-        const [activeBets, setActiveBets] = useState([]);
+        const [inviteMessage, setInviteMessage] = useState('');
         const setActive = event => {
             event.currentTarget.classList.toggle('active');
             let value = event.target.id;
@@ -22,6 +22,7 @@ export default function LeagueAdminPage(){
         }
         const {id} = useParams()
         useEffect(() => {
+          
             getRequest.request({
                 url: `LeagueBet/GetAllMatches/${id}`
             }).then((result) => {
@@ -32,14 +33,22 @@ export default function LeagueAdminPage(){
             }).then((result) => {
                 setBetTypes(result.data.message)
             })
-            getRequest.request({
-                url: `/LeagueBet/GetAllLeagueBets/${id}`
-            }).then((result) => {
-                setActiveBets(result.data.message);
-                isLoading(false);
-            })
-            
         }, [])
+    function sendInvite(){
+        let input = document.getElementById('username').value;
+        postRequest.request({
+            url: `Invite/SendInvite/${id}`,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: input
+        }).then((result) => {
+            if(result.data.IsSucceeded === true)
+            {
+                setInviteMessage(`You invited ${input} to your league!`)
+            }
+        })
+    }
         function onSave(){
             let request = [];
             bets.forEach((b) => {
@@ -72,6 +81,23 @@ export default function LeagueAdminPage(){
         return (
             <>
                     <Row>
+                        <Col className={'center'} l={12} m={12} s={12}>
+                            <Col l={8} m={12} s={12} offset={'l2 m5'}>
+                                    <TextInput l={8} m={8} s={12} id={'username'} placeholder={'Username'}></TextInput>
+                                    <Button
+                                        style={{marginTop:'25px'}}
+                                        node="button"
+                                        type="submit"
+                                        waves="light"
+                                        onClick={sendInvite}
+                                    >
+                                        Invite
+                                        <Icon right>
+                                            send
+                                        </Icon>
+                                    </Button>
+                            </Col>
+                        </Col>
                         {matches.map((m) => (
                             <Col l={6} m={6} s={12} className={'center'}>
                                 <Card
@@ -119,13 +145,12 @@ export default function LeagueAdminPage(){
                         ))}
                         <Col l={3} m={5} s={12}>
                             <Button
-                                className="green"
+                                className="green addButton"
                                 floating
                                 icon={<Icon>add</Icon>}
                                 large
                                 node="button"
                                 waves="light"
-                                style={{position: "fixed",bottom:'15px'}}
                                 onClick={onSave}
                             />
                         </Col>

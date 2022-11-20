@@ -12,16 +12,16 @@ import Navbar from "./Components/Navbar";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <Navbar/>
-    <Container>
         <BrowserRouter>
+            <Navbar/>
+            <Container>
             <Routes>
             <Route path={"/"} element={Home()}></Route>
-            <Route path={`/league/Admin/:id`} element={<LeagueAdminPage/>}></Route>
-            <Route path={`/league/User/:id`} element={<LeagueUserPage/>}></Route>
+            <Route path={`/league/admin/:id`} element={<LeagueAdminPage/>}></Route>
+            <Route path={`/league/user/:id`} element={<LeagueUserPage/>}></Route>
             </Routes>
+            </Container>
         </BrowserRouter>
-    </Container>
   </React.StrictMode>
 );
 

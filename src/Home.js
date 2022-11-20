@@ -24,7 +24,10 @@ export default function Home() {
         else {
            ifTokenExpired();
             return (
-                <HomePage/>
+                <>
+                    <HomePage/>
+                </>
+                
             )
         }
     }

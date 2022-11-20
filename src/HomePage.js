@@ -4,10 +4,12 @@ import {getRequest} from "./Request";
 import LeaguePartial from "./Components/LeaguePartial";
 import Cookies from "universal-cookie/lib";
 import jwtDecode from "jwt-decode";
+import {Link} from "react-router-dom";
 
 export default function HomePage() {
     const [loading, isLoading] =  useState(true);
-    const [data, setData] = useState(null);
+    const [data, setData] = useState([]);
+    const [error, setError] = useState('');
     const config = {
         url: 'League/GetAllLeaguesByUser',
     }
@@ -16,12 +18,17 @@ export default function HomePage() {
         response.then(function (result){
          setData(result.data);
          isLoading(false);
+        }).catch(function (error){
+            if(error.response){
+                setError(error.response.data.message)
+                isLoading(false);
+            }
         })
     }, [])
     function setMatches(){
         getRequest.request({
             url: '/Admin/SetMatches'
-        });
+        })
     }
     function checkBets(){
         getRequest.request({
@@ -34,6 +41,17 @@ export default function HomePage() {
         if(decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'Owner'){
             return(
                 <>
+                    <Col l={4} m={6} s={12} offset={'l4 m3'}>
+                        <a>
+                            <Card
+                                className='league-card center'
+                                textClassName="white-text"
+                                title='Create your own league'
+                            >
+                                <Icon medium={true}>add</Icon>
+                            </Card>
+                        </a>
+                    </Col>
                     <Col l={4} m={6} s={12} offset={'l4 m3'}>
                         <Card
                             actions={[
@@ -67,13 +85,11 @@ export default function HomePage() {
         else{
             return(
                 <>
+                    <div className={'red-text center'}>{error}</div>
                     <Row>
                     {data.map((item) => (
                         <LeaguePartial key={item.id} league={item}/>
                     ))}
-                        <Col l={6}>
-                          Create League  
-                        </Col>
                         {checkOwner()}
                     </Row>
                 </>

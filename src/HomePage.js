@@ -4,15 +4,16 @@ import {getRequest} from "./Request";
 import LeaguePartial from "./Components/LeaguePartial";
 import Cookies from "universal-cookie/lib";
 import jwtDecode from "jwt-decode";
+import {Link} from "react-router-dom";
 
 export default function HomePage() {
     const [loading, isLoading] =  useState(true);
     const [data, setData] = useState([]);
     const [error, setError] = useState('');
-    const config = {
-        url: 'League/GetAllLeaguesByUser',
-    }
     useEffect(() => {
+        const config = {
+            url: 'League/GetAllLeaguesByUser',
+        }
         let response = getRequest.request(config);
         response.then(function (result){
          setData(result.data);
@@ -52,8 +53,8 @@ export default function HomePage() {
                     <Col l={4} m={6} s={12} offset={'l4 m3'}>
                         <Card
                             actions={[
-                                <a href={'#'} key="1" onClick={setMatches}>Set Matches</a>,
-                                <a href={'#'} key="2" onClick={checkBets}>Check Bets</a>,
+                                <Link to={'#'} key="1" onClick={setMatches}>Set Matches</Link>,
+                                <Link to={'#'} key="2" onClick={checkBets}>Check Bets</Link>,
                             ]}
                             className='league-card'
                             textClassName="white-text"

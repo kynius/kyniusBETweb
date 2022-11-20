@@ -49,7 +49,7 @@ const Navbar = () =>{
                 <>
                     <Row id={'mobileNav'} className={'mobileNav center'}>
                         <Link to={'/'}><Col s={3} m={3} l={3}><Icon className={'mobileNavIcon'} medium={true}>home</Icon></Col></Link>
-                        <a href={'#'} data-target="slide-out" className={'sidenav-trigger'}><Col s={3} m={3} l={3}><Icon className={'mobileNavIcon'} medium={true}>message</Icon><span className={'red-text'}>{invites.length}</span></Col></a>
+                        <Link to={'#'} data-target="slide-out" className={'sidenav-trigger'}><Col s={3} m={3} l={3}><Icon className={'mobileNavIcon'} medium={true}>message</Icon><span className={'red-text'}>{invites.length}</span></Col></Link>
                         <Link to={'#'}><Col s={3} m={3} l={3}><Icon title={'Function disabled'} className={'mobileNavIcon'} medium={true}>account_circle</Icon></Col></Link>
                         <Link to={'#'}><Col s={3} m={3} l={3}><Icon title={'Function disabled'} className={'mobileNavIcon'} medium={true}>settings</Icon></Col></Link>
                     </Row>

@@ -4,7 +4,7 @@ import Cookies from "universal-cookie/lib";
 const cookies = new Cookies();
 const token = cookies.get('token');
 let web = 'https://kyniusbetapi.gadzina.biz/';
-let local = 'https://localhost:5001/'
+// let local = 'https://localhost:5001/';
     export const getRequest = axios.create({
         baseURL: web,
         headers: {

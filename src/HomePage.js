@@ -4,7 +4,6 @@ import {getRequest} from "./Request";
 import LeaguePartial from "./Components/LeaguePartial";
 import Cookies from "universal-cookie/lib";
 import jwtDecode from "jwt-decode";
-import {Link} from "react-router-dom";
 
 export default function HomePage() {
     const [loading, isLoading] =  useState(true);
@@ -42,7 +41,6 @@ export default function HomePage() {
             return(
                 <>
                     <Col l={4} m={6} s={12} offset={'l4 m3'}>
-                        <a>
                             <Card
                                 className='league-card center'
                                 textClassName="white-text"
@@ -50,13 +48,12 @@ export default function HomePage() {
                             >
                                 <Icon medium={true}>add</Icon>
                             </Card>
-                        </a>
                     </Col>
                     <Col l={4} m={6} s={12} offset={'l4 m3'}>
                         <Card
                             actions={[
-                                <a key="1" onClick={setMatches}>Set Matches</a>,
-                                <a key="2" onClick={checkBets}>Check Bets</a>,
+                                <a href={'#'} key="1" onClick={setMatches}>Set Matches</a>,
+                                <a href={'#'} key="2" onClick={checkBets}>Check Bets</a>,
                             ]}
                             className='league-card'
                             textClassName="white-text"

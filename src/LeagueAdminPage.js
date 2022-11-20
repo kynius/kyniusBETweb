@@ -1,14 +1,14 @@
 import {getRequest, postRequest} from "./Request";
 import {Button, Card, Col, Icon, Preloader, Row, TextInput} from "react-materialize";
 import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom"; 
+import {useNavigate, useParams} from "react-router-dom"; 
 
 export default function LeagueAdminPage(){
         const [loading, isLoading] = useState(true);
         const [matches, setMatches] = useState([]);
         const [betTypes, setBetTypes] = useState([]);
         const [bets, setBets] = useState([]);
-        const [inviteMessage, setInviteMessage] = useState('');
+        const navigate = useNavigate();
         const setActive = event => {
             event.currentTarget.classList.toggle('active');
             let value = event.target.id;
@@ -22,7 +22,6 @@ export default function LeagueAdminPage(){
         }
         const {id} = useParams()
         useEffect(() => {
-          
             getRequest.request({
                 url: `LeagueBet/GetAllMatches/${id}`
             }).then((result) => {
@@ -32,8 +31,9 @@ export default function LeagueAdminPage(){
                 url: `/Bet/GetAllBetTypes/${id}`
             }).then((result) => {
                 setBetTypes(result.data.message)
+                isLoading(false);
             })
-        }, [])
+        }, [id])
     function sendInvite(){
         let input = document.getElementById('username').value;
         postRequest.request({
@@ -42,11 +42,6 @@ export default function LeagueAdminPage(){
                 'Content-Type': 'application/json'
             },
             data: input
-        }).then((result) => {
-            if(result.data.IsSucceeded === true)
-            {
-                setInviteMessage(`You invited ${input} to your league!`)
-            }
         })
     }
         function onSave(){
@@ -63,6 +58,7 @@ export default function LeagueAdminPage(){
                 url: `/LeagueBet/AddLeagueBets/${id}`,
                 data: request
             });
+            navigate('/');
         }
         function checkLoading() {
             if (loading === true) {
@@ -115,7 +111,6 @@ export default function LeagueAdminPage(){
                                                         marginTop: '5px'
                                                     }}
                                                     className={'leagueBetButton'}
-                                                    waves="light"
                                                     onClick={setActive}
                                                 >
                                                     <div id={`${m.id};${b.id}`}>{b.name} | {b.pointValue}</div>
@@ -143,7 +138,6 @@ export default function LeagueAdminPage(){
                                 </Card>
                             </Col>
                         ))}
-                        <Col l={3} m={5} s={12}>
                             <Button
                                 className="green addButton"
                                 floating
@@ -153,8 +147,6 @@ export default function LeagueAdminPage(){
                                 waves="light"
                                 onClick={onSave}
                             />
-                        </Col>
-                       
                     </Row>
                 <div className={'center'}>
                     {checkLoading()}

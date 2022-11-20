@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {getRequest, postRequest} from "../Request";
-import {Button, Col, Icon, Row, Toast} from "react-materialize";
+import {Button, Col, Icon, Row} from "react-materialize";
 import {Link} from "react-router-dom";
 import M from 'materialize-css/dist/js/materialize.min'
 import Cookies from "universal-cookie/lib";
@@ -47,11 +47,11 @@ const Navbar = () =>{
         else {
             return (
                 <>
-                    <Row id={'mobileNav'} className={'mobileNav'}>
-                        <Link to={'/'}><Col s={3}><Icon className={'mobileNavIcon'} medium={true}>home</Icon></Col></Link>
-                        <a data-target="slide-out" className={'sidenav-trigger'}><Col s={3}><Icon className={'mobileNavIcon'} medium={true}>message</Icon><span className={'red-text'}>{invites.length}</span></Col></a>
-                        <div ><Col s={3}><Icon title={'Function disabled'} className={'mobileNavIcon'} medium={true}>account_circle</Icon></Col></div>
-                        <div ><Col s={3}><Icon title={'Function disabled'} className={'mobileNavIcon'} medium={true}>settings</Icon></Col></div>
+                    <Row id={'mobileNav'} className={'mobileNav center'}>
+                        <Link to={'/'}><Col s={3} m={3} l={3}><Icon className={'mobileNavIcon'} medium={true}>home</Icon></Col></Link>
+                        <a href={'#'} data-target="slide-out" className={'sidenav-trigger'}><Col s={3} m={3} l={3}><Icon className={'mobileNavIcon'} medium={true}>message</Icon><span className={'red-text'}>{invites.length}</span></Col></a>
+                        <Link to={'#'}><Col s={3} m={3} l={3}><Icon title={'Function disabled'} className={'mobileNavIcon'} medium={true}>account_circle</Icon></Col></Link>
+                        <Link to={'#'}><Col s={3} m={3} l={3}><Icon title={'Function disabled'} className={'mobileNavIcon'} medium={true}>settings</Icon></Col></Link>
                     </Row>
                     <ul className="sidenav collection" id="slide-out">
                         {invites.map((m) => (

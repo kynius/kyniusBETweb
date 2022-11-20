@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {getRequest, postRequest} from "./Request";
 import {Button, Card, Col, Icon, Preloader, Row} from "react-materialize";
 
@@ -8,6 +8,7 @@ export default function LeagueUserPage(){
     const [matches, setMatches] = useState([]);
     const [bets, setBets] = useState([]);
     const [error, setError] = useState([]);
+    const navigate = useNavigate();
     let {id} = useParams()
     useEffect(() => {
         let betResponse = getRequest.request({
@@ -71,6 +72,7 @@ export default function LeagueUserPage(){
             url: `/Bet/AddBet/${id}`,
             data: request
         });
+        navigate('/');
     }
     function betOptions(bet){
         if(bet.betType.name === "Winner")
@@ -84,7 +86,6 @@ export default function LeagueUserPage(){
                             marginTop: '5px'
                         }}
                         className={'leagueBetButton'}
-                        waves="light"
                         onClick={setActive}
                     >
                         <div data-type={`${bet.id};${bet.dateToBet}`} data-value={bet.homeTeam.id}>{bet.homeTeam.name}</div>
@@ -96,7 +97,6 @@ export default function LeagueUserPage(){
                             marginTop: '5px'
                         }}
                         className={'leagueBetButton'}
-                        waves="light"
                         onClick={setActive}
                     >
                         <div data-type={`${bet.id};${bet.dateToBet}`} data-value={0}>X</div>
@@ -108,7 +108,6 @@ export default function LeagueUserPage(){
                             marginTop: '5px'
                         }}
                         className={'leagueBetButton'}
-                        waves="light"
                         onClick={setActive}
                     >
                         <div data-type={`${bet.id};${bet.dateToBet}`} data-value={bet.awayTeam.id}>{bet.awayTeam.name}</div>
@@ -126,7 +125,6 @@ export default function LeagueUserPage(){
                             marginTop: '5px'
                         }}
                         className={'leagueBetButton'}
-                        waves="light"
                         onClick={setActive}
                     >
                         <div data-type={`${bet.id};${bet.dateToBet}`} data-value={true}><Icon className={'green-text'} large={true}>check</Icon></div>
@@ -138,7 +136,6 @@ export default function LeagueUserPage(){
                             marginTop: '5px'
                         }}
                         className={`leagueBetButton`}
-                        waves="light"
                         onClick={setActive}
                     >
                         <div data-type={`${bet.id};${bet.dateToBet}`} data-value={false}><Icon className={'red-text'} large={true}>close</Icon></div>
@@ -220,6 +217,15 @@ export default function LeagueUserPage(){
                     </Card>
                 </Col>
             ))}
+                <Button
+                    className="green addButton"
+                    floating
+                    icon={<Icon>add</Icon>}
+                    large
+                    node="button"
+                    waves="light"
+                    onClick={onSave}
+                />
             {checkLoading()}
             </Row>
         </>

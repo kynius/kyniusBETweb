@@ -5,7 +5,7 @@
     --bg-color: #fff;
     --heading-color: #292922;
     --hover-color: #B9BFEC;
-    --active-color: #fff
+    --active-color: #6A87A3
 }
 [data-theme="dark"] {
     --primary-color: #9A97F3;
@@ -14,7 +14,7 @@
     --bg-color: #161625;
     --heading-color: #818cab;
     --hover-color: #D5D8F3;
-    --active-color: #fff
+    --active-color: #6A87A3
 }
 body{
     background-color: var(--bg-color);

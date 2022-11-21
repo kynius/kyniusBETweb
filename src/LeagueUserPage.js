@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {getRequest, postRequest} from "./Request";
 import {Button, Card, Col, Icon, Preloader, Row} from "react-materialize";
 
@@ -7,10 +7,13 @@ export default function LeagueUserPage(){
     const [loading, isLoading] = useState(true);
     const [matches, setMatches] = useState([]);
     const [bets, setBets] = useState([]);
+    const [activeBets, setActiveBets] = useState([]);
     const [error, setError] = useState([]);
     const navigate = useNavigate();
     let {id} = useParams()
+    
     useEffect(() => {
+        let array = [];
         let betResponse = getRequest.request({
             url: `LeagueBet/GetAllLeagueBets/${id}`
         });
@@ -22,12 +25,30 @@ export default function LeagueUserPage(){
             else {
                 setError(result.data.message);
             }
-            isLoading(false);
         }).catch(function (error){
             if(error.response){
                 setError(error.response.data.message)
-                isLoading(false);
             }
+        }) 
+        getRequest.request({
+            url: 'Bet/GetAllBets/37?onlyActive=true'
+        }).then((result) => {
+            
+            setActiveBets(result.data.message);
+            result.data.message.forEach((m) => {
+                let b = document.querySelector(`[data-type="${m.leagueBetId};${m.dateToBet}"][data-value="${m.value}"]`);
+                let value = `${m.leagueBetId};${m.dateToBet};${m.value}`
+                b.parentElement.classList.add('active');
+                isLoading(false);
+                if(array.includes(value))
+                {
+                    
+                }
+                else{
+                    array.push(value);
+                    setBets((prevState) => [...prevState, value])
+                }
+            })
         })
     }, [id])
     const setActive = event => {
@@ -67,11 +88,13 @@ export default function LeagueUserPage(){
             }
             request.push(bet);
         })
-        console.log(request);
-        postRequest.request({
-            url: `/Bet/AddBet/${id}`,
-            data: request
-        });
+        if(request !== activeBets)
+        {
+            postRequest.request({
+                url: `/Bet/AddBet/${id}`,
+                data: request
+            });
+        }
         navigate('/');
     }
     function betOptions(bet){
@@ -176,6 +199,9 @@ export default function LeagueUserPage(){
     }
     return(
         <>
+            <Card className={'center league-card'}>
+            <Link className={'black-text'} to={`/league/bets/${id}`}>See all your bets <Icon>arrow_forward</Icon></Link>
+            </Card>
             <div className={'red-text center'}>{error}</div>
             <Row>
             {matches.map((m) => (

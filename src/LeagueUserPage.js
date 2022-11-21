@@ -38,7 +38,7 @@ export default function LeagueUserPage(){
             result.data.message.forEach((m) => {
                 let b = document.querySelector(`[data-type="${m.leagueBetId};${m.dateToBet}"][data-value="${m.value}"]`);
                 let value = `${m.leagueBetId};${m.dateToBet};${m.value}`
-                b.parentElement.classList.add('active');
+                b.classList.add('active');
                 isLoading(false);
                 if(array.includes(value))
                 {
@@ -52,12 +52,12 @@ export default function LeagueUserPage(){
         })
     }, [id])
     const setActive = event => {
-        let value = event.currentTarget.firstElementChild.dataset.type + ';' + event.currentTarget.firstElementChild.dataset.value;
-        let otherBets = Array.from(document.querySelectorAll(`[data-type="${event.currentTarget.firstElementChild.dataset.type}"]`))
-        let activeBet = otherBets.find((x) => x.parentElement.classList.contains('active') === true);
-        if(event.currentTarget.firstElementChild.dataset.type !== undefined || event.currentTarget.firstElementChild.dataset.value !== undefined)
+        let value = event.currentTarget.dataset.type + ';' + event.currentTarget.dataset.value;
+        let otherBets = Array.from(document.querySelectorAll(`[data-type="${event.currentTarget.dataset.type}"]`))
+        let activeBet = otherBets.find((x) => x.classList.contains('active') === true);
+        if(event.currentTarget.dataset.type !== undefined || event.currentTarget.dataset.value !== undefined)
         {
-            if(activeBet === undefined || activeBet.parentElement === event.currentTarget)
+            if(activeBet === undefined || activeBet === event.currentTarget)
             {
                 event.currentTarget.classList.toggle('active');
                 if(bets.includes(value))
@@ -70,7 +70,7 @@ export default function LeagueUserPage(){
             }
             else{
                 let activeBetValue = activeBet.dataset.type + ';' + activeBet.dataset.value;
-                activeBet.parentElement.classList.toggle('active');
+                activeBet.classList.toggle('active');
                 event.currentTarget.classList.toggle('active');
                 setBets(bets.filter(item => item !== activeBetValue));
                 setBets((prevState) => [...prevState, value]);
@@ -103,6 +103,8 @@ export default function LeagueUserPage(){
             return(
                 <>
                     <Button
+                        data-type={`${bet.id};${bet.dateToBet}`} 
+                        data-value={bet.homeTeam.id}
                         node="button"
                         style={{
                             marginRight: '5px',
@@ -111,9 +113,11 @@ export default function LeagueUserPage(){
                         className={'leagueBetButton'}
                         onClick={setActive}
                     >
-                        <div data-type={`${bet.id};${bet.dateToBet}`} data-value={bet.homeTeam.id}>{bet.homeTeam.name}</div>
+                        <div >{bet.homeTeam.name}</div>
                     </Button>
                     <Button
+                        data-type={`${bet.id};${bet.dateToBet}`}
+                        data-value={0}
                         node="button"
                         style={{
                             marginRight: '5px',
@@ -122,9 +126,11 @@ export default function LeagueUserPage(){
                         className={'leagueBetButton'}
                         onClick={setActive}
                     >
-                        <div data-type={`${bet.id};${bet.dateToBet}`} data-value={0}>X</div>
+                        <div>X</div>
                     </Button>
                     <Button
+                        data-type={`${bet.id};${bet.dateToBet}`}
+                        data-value={bet.awayTeam.id}
                         node="button"
                         style={{
                             marginRight: '5px',
@@ -133,7 +139,7 @@ export default function LeagueUserPage(){
                         className={'leagueBetButton'}
                         onClick={setActive}
                     >
-                        <div data-type={`${bet.id};${bet.dateToBet}`} data-value={bet.awayTeam.id}>{bet.awayTeam.name}</div>
+                        <div>{bet.awayTeam.name}</div>
                     </Button>
                 </>
             )
@@ -142,6 +148,8 @@ export default function LeagueUserPage(){
             return (
                 <>
                     <Button
+                        data-type={`${bet.id};${bet.dateToBet}`}
+                        data-value={true}
                         node="button"
                         style={{
                             marginRight: '5px',
@@ -150,9 +158,11 @@ export default function LeagueUserPage(){
                         className={'leagueBetButton'}
                         onClick={setActive}
                     >
-                        <div data-type={`${bet.id};${bet.dateToBet}`} data-value={true}><Icon className={'green-text'} large={true}>check</Icon></div>
+                        <div><Icon className={'green-text'} large={true}>check</Icon></div>
                     </Button>
                     <Button
+                        data-type={`${bet.id};${bet.dateToBet}`} 
+                        data-value={false}
                         node="button"
                         style={{
                             marginRight: '5px',
@@ -161,7 +171,7 @@ export default function LeagueUserPage(){
                         className={`leagueBetButton`}
                         onClick={setActive}
                     >
-                        <div data-type={`${bet.id};${bet.dateToBet}`} data-value={false}><Icon className={'red-text'} large={true}>close</Icon></div>
+                        <div><Icon className={'red-text'} large={true}>close</Icon></div>
                     </Button>
                 </>
             )

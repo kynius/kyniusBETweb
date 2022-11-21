@@ -13,7 +13,7 @@ export default function BetsPage(){
             setBets(result.data.message);
             result.data.message.forEach((bet) => {
                 let b = document.querySelector(`[data-type="${bet.leagueBetId};${bet.dateToBet}"][data-value="${bet.value}"]`);
-                b.parentElement.classList.add('active');
+                b.classList.add('active');
             })
         })
     },[id])
@@ -36,6 +36,8 @@ export default function BetsPage(){
             return(
                 <>
                     <Button
+                        data-type={`${bet.leagueBetId};${bet.dateToBet}`}
+                        data-value={bet.homeTeam.id}
                         node="button"
                         style={{
                             marginRight: '5px',
@@ -43,9 +45,11 @@ export default function BetsPage(){
                         }}
                         className={'leagueBetButton'}
                     >
-                        <div data-type={`${bet.leagueBetId};${bet.dateToBet}`} data-value={bet.homeTeam.id}>{bet.homeTeam.name}</div>
+                        <div >{bet.homeTeam.name}</div>
                     </Button>
                     <Button
+                        data-type={`${bet.leagueBetId};${bet.dateToBet}`} 
+                        data-value={0}
                         node="button"
                         style={{
                             marginRight: '5px',
@@ -53,9 +57,11 @@ export default function BetsPage(){
                         }}
                         className={'leagueBetButton'}
                     >
-                        <div data-type={`${bet.leagueBetId};${bet.dateToBet}`} data-value={0}>X</div>
+                        <div>X</div>
                     </Button>
                     <Button
+                        data-type={`${bet.leagueBetId};${bet.dateToBet}`} 
+                        data-value={bet.awayTeam.id}
                         node="button"
                         style={{
                             marginRight: '5px',
@@ -63,7 +69,7 @@ export default function BetsPage(){
                         }}
                         className={'leagueBetButton'}
                     >
-                        <div data-type={`${bet.leagueBetId};${bet.dateToBet}`} data-value={bet.awayTeam.id}>{bet.awayTeam.name}</div>
+                        <div>{bet.awayTeam.name}</div>
                     </Button>
                 </>
             )
@@ -72,6 +78,8 @@ export default function BetsPage(){
             return (
                 <>
                     <Button
+                        data-type={`${bet.leagueBetId};${bet.dateToBet}`}
+                        data-value={true}
                         node="button"
                         style={{
                             marginRight: '5px',
@@ -79,9 +87,11 @@ export default function BetsPage(){
                         }}
                         className={'leagueBetButton'}
                     >
-                        <div data-type={`${bet.leagueBetId};${bet.dateToBet}`} data-value={true}><Icon className={'green-text'} large={true}>check</Icon></div>
+                        <div><Icon className={'green-text'} large={true}>check</Icon></div>
                     </Button>
                     <Button
+                        data-type={`${bet.leagueBetId};${bet.dateToBet}`}
+                        data-value={false}
                         node="button"
                         style={{
                             marginRight: '5px',
@@ -89,7 +99,7 @@ export default function BetsPage(){
                         }}
                         className={`leagueBetButton`}
                     >
-                        <div data-type={`${bet.leagueBetId};${bet.dateToBet}`} data-value={false}><Icon className={'red-text'} large={true}>close</Icon></div>
+                        <div><Icon className={'red-text'} large={true}>close</Icon></div>
                     </Button>
                 </>
             )

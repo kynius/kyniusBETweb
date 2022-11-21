@@ -11,12 +11,15 @@ export default function BetsPage(){
             url: `Bet/GetAllBets/${id}`
         }).then((result) => {
             setBets(result.data.message);
-            result.data.message.forEach((bet) => {
-                let b = document.querySelector(`[data-type="${bet.leagueBetId};${bet.dateToBet}"][data-value="${bet.value}"]`);
-                b.classList.add('active');
-            })
         })
     },[id])
+    bets.forEach((bet) => {
+        let b = document.querySelector(`[data-type="${bet.leagueBetId};${bet.dateToBet}"][data-value="${bet.value}"]`)
+        if(b !== null)
+        {
+            b.classList.add('active');
+        }
+    })
     function checkIsCorrect(bet){
         if(bet.isCorrect === true)
         {

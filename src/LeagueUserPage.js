@@ -33,13 +33,11 @@ export default function LeagueUserPage(){
         getRequest.request({
             url: 'Bet/GetAllBets/37?onlyActive=true'
         }).then((result) => {
-            
             setActiveBets(result.data.message);
             result.data.message.forEach((m) => {
                 let b = document.querySelector(`[data-type="${m.leagueBetId};${m.dateToBet}"][data-value="${m.value}"]`);
                 let value = `${m.leagueBetId};${m.dateToBet};${m.value}`
                 b.classList.add('active');
-                isLoading(false);
                 if(array.includes(value))
                 {
                     
@@ -49,6 +47,7 @@ export default function LeagueUserPage(){
                     setBets((prevState) => [...prevState, value])
                 }
             })
+            isLoading(false);
         })
     }, [id])
     const setActive = event => {
